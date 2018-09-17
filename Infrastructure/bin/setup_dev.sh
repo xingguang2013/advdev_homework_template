@@ -17,7 +17,7 @@ oc policy add-role-to-user view --serviceaccount=default -n ${GUID}-parks-dev
 
 oc policy add-role-to-user edit system:serviceaccount:${GUID}-jenkins:jenkins -n ${GUID}-parks-dev
 
-oc new-app -p MONGODB_USER=mongodb -p MONGODB_PASSWORD=mongodb -p MONGODB_DATABASE=mongodb -p MONGODB_ADMIN_PASSWORD=mongodb --name=mongodb mongodb-ephemeral -n ${GUID}-parks-dev
+oc new-app -e MONGODB_USER=mongodb -e MONGODB_PASSWORD=mongodb -e MONGODB_DATABASE=mongodb -e MONGODB_ADMIN_PASSWORD=mongodb --name=mongodb registry.access.redhat.com/rhscl.mongodb-34-rhel7:latest -n ${GUID}-parks-dev
 
 oc new-build --binary=true --name="mlbparks" jboss-eap70-openshift:1.7 -n ${GUID}-parks-dev
 oc new-build --binary=true --name="nationalparks" redhat-openjdk18-openshift:1.2 -n ${GUID}-parks-dev
