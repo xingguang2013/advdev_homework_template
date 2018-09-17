@@ -41,11 +41,11 @@ oc rollout resume dc jenkins -n ${GUID}-jenkins
 oc new-build --name=maven-slave-pod --dockerfile=$'FROM docker.io/openshift/jenkins-slave-maven-centos7:v3.9\n USER root\n RUN yum -y install skopeo apb && yum clean all\n USER 1001' -n ${GUID}-jenkins
 
 while : ; do
-  oc get pod -n ${GUID}-jenkins | grep -v "deploy\|build" | grep -q "1/1"
-  if ["$?" == "1"]; then
-    break
-  else
-    sleep 5
+  echo "Checking if Jenkins is Ready..."
+   oc get pod -n ${GUID}-jenkins | grep -v "deploy\|build" | grep -q "1/1"
+   [[ "$?" == "1" ]] || break
+   echo "...no. Sleeping 10 seconds."
+   sleep 10
 done
 
 oc tag maven-slave-pod:latest maven-slave-pod:v3.9 -n ${GUID}-jenkins
