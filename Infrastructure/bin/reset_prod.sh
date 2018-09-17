@@ -18,3 +18,42 @@ echo "Resetting Parks Production Environment in project ${GUID}-parks-prod to Gr
 # rollout followed by a Green rollout.
 
 # To be Implemented by Student
+
+switch_service_color 'mlbparks' "${GUID}" 'pass' "${ORIGIN}"
+curl "http://mlbparks-${TARGET}-${GUID}-parks-prod.apps.${CLUSTER}/ws/info/"
+
+switch_service_color 'nationalparks' "${GUID}" 'pass' "${ORIGIN}"
+curl "http://nationalparks-${TARGET}-${GUID}-parks-prod.apps.${CLUSTER}/ws/info/"
+
+switch_service_color 'parksmap' "${GUID}" 'pass' "${ORIGIN}"
+
+switch_service_color() {
+  SERVICE=$1
+  GUID=$2
+  COLOR_RESPONSE=$3
+
+  echo "$1 / $2 / $3"
+
+  if [[ $COLOR_RESPONSE = *"Blue"* ]]; then
+    CURRENT='blue'
+    TARGET='green'
+  else
+    CURRENT='green'
+    TARGET='blue'
+  fi
+
+  SERVICE_CURRENT=${SERVICE}-${CURRENT}
+  SERVICE_TARGET=${SERVICE}-${TARGET}
+
+  echo "Setting ${SERVICE} Service in Parks Production Environment in project ${GUID}-prod from ${CURRENT} to ${TARGET}"
+
+  oc scale dc/${SERVICE_TARGET} --replicas=1 -n "${GUID}-parks-prod"
+
+  oc rollout latest dc/${SERVICE_TARGET} -n "${GUID}-parks-prod"
+
+  oc patch service/${SERVICE} \
+    -p "{\"metadata\":{\"labels\":{\"app\":\"${SERVICE_TARGET}\", \"template\":\"${SERVICE_TARGET}\"}}, \"spec\":{\"selector\":{\"app\":\"${SERVICE_TARGET}\", \"deploymentconfig\":\"${SERVICE_TARGET}\"}}}" \
+    -n "${GUID}-parks-prod"
+
+  oc scale dc/${SERVICE_CURRENT} --replicas=0 -n "${GUID}-parks-prod"
+}
