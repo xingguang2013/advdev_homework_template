@@ -32,20 +32,20 @@ oc new-app jenkins-persistent --param ENABLE_OAUTH=true --param MEMORY_LIMIT=2Gi
 
 oc rollout pause dc jenkins -n ${GUID}-jenkins
 
-oc set probe dc jenkins --readiness --initial-delay-seconds=180 --timeout-seconds=60 -n ${GUID}-jenkins
+oc set probe dc/jenkins --readiness --initial-delay-seconds=300 --timeout-seconds=60 -n ${GUID}-jenkins
 
-oc set probe dc/nexus3 --liveness --failure-threshold 3 --initial-delay-seconds 60 -- echo ok
+oc set probe dc/jenkins --liveness --failure-threshold 3 --initial-delay-seconds 60 -- echo ok -n ${GUID}-jenkins
 
 oc rollout resume dc jenkins -n ${GUID}-jenkins
 
 oc new-build --name=maven-slave-pod --dockerfile=$'FROM docker.io/openshift/jenkins-slave-maven-centos7:v3.9\n USER root\n RUN yum -y install skopeo apb && yum clean all\n USER 1001' -n ${GUID}-jenkins
 
 while : ; do
-  echo "Checking if Jenkins is Ready..."
+  echo "Checking Jenkins is Ready..."
    oc get pod -n ${GUID}-jenkins | grep -v "deploy\|build" | grep -q "1/1"
    [[ "$?" == "1" ]] || break
-   echo "...no. Sleeping 10 seconds."
-   sleep 10
+   echo "...no. Sleeping 30 seconds."
+   sleep 30
 done
 
 oc tag maven-slave-pod:latest maven-slave-pod:v3.9 -n ${GUID}-jenkins
