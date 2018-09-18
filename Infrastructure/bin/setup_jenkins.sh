@@ -42,6 +42,8 @@ oc rollout resume dc jenkins -n ${GUID}-jenkins
 
 oc new-build --name=maven-slave-pod --dockerfile=$'FROM docker.io/openshift/jenkins-slave-maven-centos7:v3.9\n USER root\n RUN yum -y install skopeo apb && yum clean all\n USER 1001' -n ${GUID}-jenkins
 
+oc policy add-role-to-user admin system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-jenkins
+
 while : ; do
   echo "Checking Jenkins is Ready..."
    oc get pod -n ${GUID}-jenkins | grep -v "deploy\|build" | grep -q "1/1"
