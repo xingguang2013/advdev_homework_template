@@ -71,7 +71,7 @@ objects:
             value: sonar
           - name: POSTGRESQL_PASSWORD
             value: sonar
-          image: docker-registry.default.svc:5000/openshift/postgresql@sha256:829f140b60b934db6cf88d21eb9d745d3dd372ac468f4927105927acde794dc0
+          image: docker-registry.default.svc:5000/openshift/postgresql
           imagePullPolicy: IfNotPresent
           livenessProbe:
             exec:
