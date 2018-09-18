@@ -19,20 +19,18 @@ echo "Resetting Parks Production Environment in project ${GUID}-parks-prod to Gr
 
 # To be Implemented by Student
 
-switch_service_color 'mlbparks' "${GUID}" 'pass' "${ORIGIN}"
-curl "http://mlbparks-${TARGET}-${GUID}-parks-prod.apps.${CLUSTER}/ws/info/"
+switch_service_color 'mlbparks' "${GUID}" "${ORIGIN}"
 
-switch_service_color 'nationalparks' "${GUID}" 'pass' "${ORIGIN}"
-curl "http://nationalparks-${TARGET}-${GUID}-parks-prod.apps.${CLUSTER}/ws/info/"
+switch_service_color 'nationalparks' "${GUID}" "${ORIGIN}"
 
-switch_service_color 'parksmap' "${GUID}" 'pass' "${ORIGIN}"
+switch_service_color 'parksmap' "${GUID}" "${ORIGIN}"
 
 switch_service_color() {
   SERVICE=$1
   GUID=$2
   COLOR_RESPONSE=$3
 
-  echo "$1 / $2 / $3"
+  echo "app -> $1 / user ->  $2 / current color -> $3"
 
   if [[ $COLOR_RESPONSE = *"Blue"* ]]; then
     CURRENT='blue'
