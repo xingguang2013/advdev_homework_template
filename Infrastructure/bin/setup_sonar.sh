@@ -15,6 +15,8 @@ echo "Setting up Sonarqube in project $GUID-sonarqube"
 
 # To be Implemented by Student
 
+sleep 240
+
 oc policy add-role-to-user admin system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-sonarqube
 oc policy add-role-to-user view system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-sonarqube
 oc policy add-role-to-user edit system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-sonarqube

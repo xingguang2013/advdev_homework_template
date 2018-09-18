@@ -28,6 +28,8 @@ echo "Setting up Jenkins in project ${GUID}-jenkins from Git Repo ${REPO} for Cl
 
 # To be Implemented by Student
 
+sleep 60
+
 oc policy add-role-to-user admin system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-jenkins
 oc policy add-role-to-user view system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-jenkins
 oc policy add-role-to-user edit system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-jenkins
