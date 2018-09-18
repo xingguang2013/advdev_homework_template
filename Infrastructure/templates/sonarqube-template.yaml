@@ -75,7 +75,7 @@ objects:
               - /usr/libexec/check-container
               - --live
             failureThreshold: 3
-            initialDelaySeconds: 120
+            initialDelaySeconds: 600
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 10
@@ -171,10 +171,10 @@ objects:
               - echo
               - ok
             failureThreshold: 3
-            initialDelaySeconds: 40
+            initialDelaySeconds: 600
             periodSeconds: 10
             successThreshold: 1
-            timeoutSeconds: 1
+            timeoutSeconds: 10
           name: sonarqube
           ports:
           - containerPort: 9000
@@ -185,10 +185,10 @@ objects:
               path: /about
               port: 9000
               scheme: HTTP
-            initialDelaySeconds: 300
+            initialDelaySeconds: 600
             periodSeconds: 10
             successThreshold: 1
-            timeoutSeconds: 1
+            timeoutSeconds: 10
           resources:
             limits:
               cpu: "2"
