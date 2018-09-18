@@ -38,6 +38,10 @@ objects:
 - apiVersion: v1
   kind: DeploymentConfig
   metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      template.alpha.openshift.io/wait-for-ready: "true"
+    generation: 1
     labels:
       app: sonarqube_db
       template: postgresql-persistent-template
@@ -67,7 +71,7 @@ objects:
             value: sonar
           - name: POSTGRESQL_PASSWORD
             value: sonar
-          image: docker-registry.default.svc:5000/openshift/postgresql
+          image: docker-registry.default.svc:5000/openshift/postgresql@sha256:829f140b60b934db6cf88d21eb9d745d3dd372ac468f4927105927acde794dc0
           imagePullPolicy: IfNotPresent
           livenessProbe:
             exec:
@@ -75,7 +79,7 @@ objects:
               - /usr/libexec/check-container
               - --live
             failureThreshold: 3
-            initialDelaySeconds: 600
+            initialDelaySeconds: 120
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 10
@@ -88,17 +92,13 @@ objects:
               command:
               - /usr/libexec/check-container
             failureThreshold: 3
-            initialDelaySeconds: 600
+            initialDelaySeconds: 5
             periodSeconds: 10
             successThreshold: 1
             timeoutSeconds: 1
           resources:
             limits:
-              cpu: "2"
-              memory: 4Gi
-            requests:
-              cpu: "1"
-              memory: 2Gi
+              memory: 512Mi
           securityContext:
             capabilities: {}
             privileged: false
@@ -175,10 +175,10 @@ objects:
               - echo
               - ok
             failureThreshold: 3
-            initialDelaySeconds: 600
+            initialDelaySeconds: 40
             periodSeconds: 10
             successThreshold: 1
-            timeoutSeconds: 10
+            timeoutSeconds: 1
           name: sonarqube
           ports:
           - containerPort: 9000
@@ -189,14 +189,14 @@ objects:
               path: /about
               port: 9000
               scheme: HTTP
-            initialDelaySeconds: 600
+            initialDelaySeconds: 20
             periodSeconds: 10
             successThreshold: 1
-            timeoutSeconds: 10
+            timeoutSeconds: 1
           resources:
             limits:
               cpu: "2"
-              memory: 4Gi
+              memory: 3Gi
             requests:
               cpu: "1"
               memory: 2Gi
@@ -262,11 +262,11 @@ objects:
       deploymentconfig: sonarqube
     sessionAffinity: None
     type: ClusterIP
+  status:
+    loadBalancer: {}
 - apiVersion: v1
   kind: Route
   metadata:
-    annotations:
-      openshift.io/host.generated: "true"
     labels:
       app: sonarqube
     name: sonarqube
