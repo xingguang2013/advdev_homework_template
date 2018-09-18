@@ -32,7 +32,7 @@ oc new-app jenkins-persistent --param ENABLE_OAUTH=true --param MEMORY_LIMIT=2Gi
 
 oc rollout pause dc jenkins -n ${GUID}-jenkins
 
-oc set probe dc/jenkins --readiness --initial-delay-seconds=300 --timeout-seconds=60 -n ${GUID}-jenkins
+oc set probe dc/jenkins --readiness --initial-delay-seconds=600 --timeout-seconds=60 -n ${GUID}-jenkins
 
 oc set probe dc/jenkins --liveness --failure-threshold 3 --initial-delay-seconds 60 -- echo ok -n ${GUID}-jenkins
 
