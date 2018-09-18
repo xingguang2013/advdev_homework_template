@@ -92,10 +92,10 @@ objects:
               command:
               - /usr/libexec/check-container
             failureThreshold: 3
-            initialDelaySeconds: 600
+            initialDelaySeconds: 60
             periodSeconds: 10
             successThreshold: 1
-            timeoutSeconds: 1
+            timeoutSeconds: 10
           resources:
             limits:
               memory: 512Mi
@@ -189,10 +189,10 @@ objects:
               path: /about
               port: 9000
               scheme: HTTP
-            initialDelaySeconds: 600
+            initialDelaySeconds: 60
             periodSeconds: 10
             successThreshold: 1
-            timeoutSeconds: 1
+            timeoutSeconds: 10
           resources:
             limits:
               cpu: "4"

@@ -36,11 +36,11 @@ oc new-app jenkins-persistent --param ENABLE_OAUTH=true --param MEMORY_LIMIT=4Gi
 
 oc rollout pause dc jenkins -n ${GUID}-jenkins
 
-oc set probe dc/jenkins --readiness --initial-delay-seconds=600 --timeout-seconds=60 -n ${GUID}-jenkins
+oc set probe dc/jenkins --readiness --initial-delay-seconds=60 --timeout-seconds=60 -n ${GUID}-jenkins
 
 oc set probe dc/jenkins --liveness --failure-threshold 3 --initial-delay-seconds 60 -- echo ok -n ${GUID}-jenkins
 
-oc patch dc/jenkins -p '{"spec":{"strategy":{"recreateParams":{"timeoutSeconds":6000}}}}' -n ${GUID}-jenkins
+oc patch dc/jenkins -p '{"spec":{"strategy":{"recreateParams":{"timeoutSeconds":600}}}}' -n ${GUID}-jenkins
 
 oc set resources dc/jenkins --limits=memory=4Gi,cpu=4 --requests=memory=2Gi,cpu=2 -n ${GUID}-jenkins
 
