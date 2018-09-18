@@ -42,6 +42,8 @@ oc set probe dc/jenkins --liveness --failure-threshold 3 --initial-delay-seconds
 
 oc patch dc/jenkins -p '{"spec":{"strategy":{"recreateParams":{"timeoutSeconds":6000}}}}' -n ${GUID}-jenkins
 
+oc set resources dc/jenkins --limits=memory=3Gi,cpu=2 --requests=memory=2Gi,cpu=1
+
 oc rollout resume dc jenkins -n ${GUID}-jenkins
 
 oc new-build --name=maven-slave-pod --dockerfile=$'FROM docker.io/openshift/jenkins-slave-maven-centos7:v3.9\n USER root\n RUN yum -y install skopeo apb && yum clean all\n USER 1001' -n ${GUID}-jenkins
