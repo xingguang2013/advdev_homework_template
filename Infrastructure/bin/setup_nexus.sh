@@ -33,6 +33,8 @@ echo "Setting up Nexus in project $GUID-nexus"
 oc process -f ./Infrastructure/templates/nexus-template.yaml -p GUID=${GUID} -n ${GUID}-nexus | oc create -f - -n ${GUID}-nexus
 
 oc policy add-role-to-user admin system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-nexus
+oc policy add-role-to-user view system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-nexus
+oc policy add-role-to-user edit system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-nexus
 
 while : ; do
    echo "Checking Nexus is Ready..."

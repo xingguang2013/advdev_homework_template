@@ -28,6 +28,10 @@ echo "Setting up Jenkins in project ${GUID}-jenkins from Git Repo ${REPO} for Cl
 
 # To be Implemented by Student
 
+oc policy add-role-to-user admin system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-jenkins
+oc policy add-role-to-user view system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-jenkins
+oc policy add-role-to-user edit system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-jenkins
+
 oc new-app jenkins-persistent --param ENABLE_OAUTH=true --param MEMORY_LIMIT=2Gi --param VOLUME_CAPACITY=4Gi -n ${GUID}-jenkins
 
 oc rollout pause dc jenkins -n ${GUID}-jenkins
@@ -41,8 +45,6 @@ oc patch dc/jenkins -p '{"spec":{"strategy":{"recreateParams":{"timeoutSeconds":
 oc rollout resume dc jenkins -n ${GUID}-jenkins
 
 oc new-build --name=maven-slave-pod --dockerfile=$'FROM docker.io/openshift/jenkins-slave-maven-centos7:v3.9\n USER root\n RUN yum -y install skopeo apb && yum clean all\n USER 1001' -n ${GUID}-jenkins
-
-oc policy add-role-to-user admin system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-jenkins
 
 while : ; do
   echo "Checking Jenkins is Ready..."
