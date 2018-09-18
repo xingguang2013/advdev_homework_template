@@ -32,7 +32,7 @@ oc policy add-role-to-user admin system:serviceaccount:gpte-jenkins:jenkins -n $
 oc policy add-role-to-user view system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-jenkins
 oc policy add-role-to-user edit system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-jenkins
 
-oc new-app jenkins-persistent --param ENABLE_OAUTH=true --param MEMORY_LIMIT=2Gi --param VOLUME_CAPACITY=4Gi -n ${GUID}-jenkins
+oc new-app jenkins-persistent --param ENABLE_OAUTH=true --param MEMORY_LIMIT=3Gi --param VOLUME_CAPACITY=4Gi -n ${GUID}-jenkins
 
 oc rollout pause dc jenkins -n ${GUID}-jenkins
 

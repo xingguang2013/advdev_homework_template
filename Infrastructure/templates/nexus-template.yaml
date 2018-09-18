@@ -86,8 +86,8 @@ objects:
               cpu: "2"
               memory: 2Gi
             requests:
-              cpu: 500m
-              memory: 1Gi
+              cpu: 1000m
+              memory: 2Gi
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           volumeMounts:
@@ -151,9 +151,6 @@ objects:
 - apiVersion: v1
   kind: Route
   metadata:
-    annotations:
-      console.alpha.openshift.io/overview-app-route: "false"
-      openshift.io/host.generated: "true"
     labels:
       app: nexus3
     name: nexus-registry
@@ -172,9 +169,6 @@ objects:
 - apiVersion: v1
   kind: Route
   metadata:
-    annotations:
-      console.alpha.openshift.io/overview-app-route: "true"
-      openshift.io/host.generated: "true"
     labels:
       app: nexus3
     name: nexus3
