@@ -38,8 +38,8 @@ while : ; do
    echo "Checking Nexus is Ready..."
    oc get pod -n ${GUID}-nexus | grep -v "deploy\|build" | grep -q "1/1"
    [[ "$?" == "1" ]] || break
-   echo "...no. Sleeping 30 seconds."
-   sleep 30
+   echo "...no. Sleeping 60 seconds."
+   sleep 60
  done
 
 curl -o setup_nexus3.sh -s https://raw.githubusercontent.com/wkulhanek/ocp_advanced_development_resources/master/nexus/setup_nexus3.sh
