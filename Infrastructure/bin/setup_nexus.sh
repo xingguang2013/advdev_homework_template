@@ -30,8 +30,6 @@ echo "Setting up Nexus in project $GUID-nexus"
 
 # To be Implemented by Student
 
-sleep 120
-
 oc process -f ./Infrastructure/templates/nexus-template.yaml -p GUID=${GUID} -n ${GUID}-nexus | oc create -f - -n ${GUID}-nexus
 
 oc policy add-role-to-user admin system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-nexus
