@@ -40,7 +40,7 @@ while : ; do
    echo "Checking Nexus is Ready..."
    oc get pod -n ${GUID}-nexus | grep -v "deploy\|build" | grep -q "1/1"
    [[ "$?" == "1" ]] || break
-   echo "...no. Sleeping 60 seconds for ${GUID}-nexus."
+   echo "Sleeping 60 seconds for ${GUID}-nexus."
    sleep 60
 done
 
