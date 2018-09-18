@@ -54,6 +54,8 @@ while : ; do
    sleep 60
 done
 
+echo "Jenkins has been started successfully"
+
 oc tag maven-slave-pod:latest maven-slave-pod:v3.9 -n ${GUID}-jenkins
 
 oc create -f ./Infrastructure/templates/mlbparks-pipeline.yaml -n ${GUID}-jenkins

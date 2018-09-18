@@ -28,3 +28,5 @@ while : ; do
    echo "...no. Sleeping 60 seconds."
    sleep 60
  done
+
+ echo "SonarQube has been started successfully"

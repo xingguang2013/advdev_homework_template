@@ -42,7 +42,9 @@ while : ; do
    [[ "$?" == "1" ]] || break
    echo "...no. Sleeping 60 seconds."
    sleep 60
- done
+done
+
+echo "Nexus has been started successfully"
 
 curl -o setup_nexus3.sh -s https://raw.githubusercontent.com/wkulhanek/ocp_advanced_development_resources/master/nexus/setup_nexus3.sh
 
