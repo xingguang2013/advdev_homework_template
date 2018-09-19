@@ -32,6 +32,7 @@ oc policy add-role-to-user admin system:serviceaccount:gpte-jenkins:jenkins -n $
 oc policy add-role-to-user view system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-jenkins
 oc policy add-role-to-user edit system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-jenkins
 
+echo "===================[new-app jenkins]==========================="
 oc new-app jenkins-persistent --param ENABLE_OAUTH=true --param MEMORY_LIMIT=4Gi --param VOLUME_CAPACITY=4Gi -n ${GUID}-jenkins
 
 oc rollout pause dc jenkins -n ${GUID}-jenkins
@@ -56,12 +57,18 @@ done
 
 echo "Jenkins has been started successfully"
 
+echo "===================[new-build jenkins-slave-pod]==============="
 oc new-build --name=jenkins-slave-pod --dockerfile=$'FROM docker.io/openshift/jenkins-slave-maven-centos7:v3.9\n USER root\n RUN yum -y install skopeo apb && yum clean all\n USER 1001' -n ${GUID}-jenkins
 
 oc tag jenkins-slave-pod:latest jenkins-slave-pod:v3.9 -n ${GUID}-jenkins
 
+echo "===================[new mlbparks-pipeline]====================="
 oc create -f ./Infrastructure/templates/mlbparks-pipeline.yaml -n ${GUID}-jenkins
+
+echo "===================[new nationalparks-pipeline]================"
 oc create -f ./Infrastructure/templates/nationalparks-pipeline.yaml -n ${GUID}-jenkins
+
+echo "===================[new parksmap-pipeline]====================="
 oc create -f ./Infrastructure/templates/parksmap-pipeline.yaml -n ${GUID}-jenkins
 
 oc set env bc/mlbparks-pipeline GUID=${GUID} REPO=${REPO} CLUSTER=${CLUSTER} -n ${GUID}-jenkins
