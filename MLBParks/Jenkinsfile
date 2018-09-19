@@ -47,17 +47,17 @@ podTemplate(
 
     stage('Sonarqube Code Analysis') {
       echo "Analyzing code use sonarqube..."
-      sh "${mvnCmd} -f ./MLBParks/pom.xml sonar:sonar -Dsonar.host.url=http://sonarqube-${GUID}-sonarqube.apps.na39.openshift.opentlc.com -Dsonar.projectName=${JOB_BASE_NAME}-${devTag}"
+      sh "${mvnCmd} -f ./MLBParks/pom.xml sonar:sonar -Dsonar.host.url=http://sonarqube-${GUID}-sonarqube.apps.${CLUSTER} -Dsonar.projectName=${JOB_BASE_NAME}-${devTag}"
     }
 
     stage('Publish Artifact To Nexus') {
       echo "Publishing artifact to nexus..."
-      sh "${mvnCmd} -f ./MLBParks/pom.xml deploy -DskipTests=true -DaltDeploymentRepository=nexus::default::http://nexus3-${GUID}-nexus.apps.na39.openshift.opentlc.com/repository/releases"
+      sh "${mvnCmd} -f ./MLBParks/pom.xml deploy -DskipTests=true -DaltDeploymentRepository=nexus::default::http://nexus3-${GUID}-nexus.apps.${CLUSTER}/repository/releases"
     }
 
     stage('Build and Tag OpenShift Image') {
       echo "Building OpenShift container image tasks:${devTag}..."
-      sh "oc start-build mlbparks --follow --from-file=http://nexus3-${GUID}-nexus.apps.na39.openshift.opentlc.com/repository/releases/com/openshift/evg/roadshow/mlbparks/${version}/mlbparks-${version}.war -n ${GUID}-parks-dev"
+      sh "oc start-build mlbparks --follow --from-file=http://nexus3-${GUID}-nexus.apps.${CLUSTER}/repository/releases/com/openshift/evg/roadshow/mlbparks/${version}/mlbparks-${version}.war -n ${GUID}-parks-dev"
       openshiftTag alias: 'false', destStream: 'mlbparks', destTag: devTag, destinationNamespace: "${GUID}-parks-dev", namespace: "${GUID}-parks-dev", srcStream: 'mlbparks', srcTag: 'latest', verbose: 'false'
     }
 
@@ -67,7 +67,7 @@ podTemplate(
       sh "oc delete configmap mlbparks-config -n ${GUID}-parks-dev --ignore-not-found=true"
       sh "oc create configmap mlbparks-config \
                     --from-literal=APPNAME='MLB Parks (Dev)' \
-                    --from-literal=DB_HOST=mongodb-34-rhel7.${GUID}-parks-dev.svc \
+                    --from-literal=DB_HOST=mongodb.${GUID}-parks-dev.svc \
                     --from-literal=DB_NAME=mongodb \
                     --from-literal=DB_PASSWORD=mongodb \
                     --from-literal=DB_PORT=27017 \
@@ -84,8 +84,8 @@ podTemplate(
       sleep 60
 
       echo "Running Integration Tests..."
-      sh "curl http://mlbparks-${GUID}-parks-dev.apps.na39.openshift.opentlc.com/ws/healthz/ | grep -q 'OK'"
-      sh "curl http://mlbparks-${GUID}-parks-dev.apps.na39.openshift.opentlc.com/ws/data/load/ | grep -q 'Items inserted in database: 30'"
+      sh "curl http://mlbparks-${GUID}-parks-dev.apps.${CLUSTER}/ws/healthz/ | grep -q 'OK'"
+      sh "curl http://mlbparks-${GUID}-parks-dev.apps.${CLUSTER}/ws/data/load/ | grep -q 'Items inserted in database: 30'"
     }
 
     stage('Copy Image to Nexus Docker Registry') {
