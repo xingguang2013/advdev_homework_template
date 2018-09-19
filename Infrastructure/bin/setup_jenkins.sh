@@ -48,16 +48,6 @@ oc rollout resume dc jenkins -n ${GUID}-jenkins
 
 oc new-build --name=jenkins-slave-pod --dockerfile=$'FROM docker.io/openshift/jenkins-slave-maven-centos7:v3.9\n USER root\n RUN yum -y install skopeo apb && yum clean all\n USER 1001' -n ${GUID}-jenkins
 
-while : ; do
-  echo "Checking Jenkins is Ready..."
-   oc get pod -n ${GUID}-jenkins | grep -v "deploy\|build" | grep -q "1/1"
-   [[ "$?" == "1" ]] || break
-   echo "Sleeping 60 seconds for ${GUID}-jenkins."
-   sleep 60
-done
-
-echo "Jenkins has been started successfully"
-
 oc tag jenkins-slave-pod:latest jenkins-slave-pod:v3.9 -n ${GUID}-jenkins
 
 oc create -f ./Infrastructure/templates/mlbparks-pipeline.yaml -n ${GUID}-jenkins
@@ -67,3 +57,13 @@ oc create -f ./Infrastructure/templates/parksmap-pipeline.yaml -n ${GUID}-jenkin
 oc set env bc/mlbparks-pipeline GUID=${GUID} REPO=${REPO} CLUSTER=${CLUSTER} -n ${GUID}-jenkins
 oc set env bc/nationalparks-pipeline GUID=${GUID} REPO=${REPO} CLUSTER=${CLUSTER} -n ${GUID}-jenkins
 oc set env bc/parksmap-pipeline GUID=${GUID} REPO=${REPO} CLUSTER=${CLUSTER} -n ${GUID}-jenkins
+
+while : ; do
+  echo "Checking Jenkins is Ready..."
+   oc get pod -n ${GUID}-jenkins | grep -v "deploy\|build" | grep -q "1/1"
+   [[ "$?" == "1" ]] || break
+   echo "Sleeping 10 seconds for ${GUID}-jenkins."
+   sleep 10
+done
+
+echo "Jenkins has been started successfully"
