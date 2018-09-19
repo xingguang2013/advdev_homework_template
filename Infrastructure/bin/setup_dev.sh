@@ -41,9 +41,9 @@ oc create configmap nationalparks-config --from-literal="APPNAME=National Parks 
 
 oc create configmap parksmap-config --from-literal="APPNAME=ParksMap (Dev)" -n ${GUID}-parks-dev
 
-oc new-app ${GUID}-parks-dev/parksmap:0.0-0 --name=parksmap --allow-missing-imagestream-tags=true -n ${GUID}-parks-dev
-oc new-app ${GUID}-parks-dev/mlbparks:0.0-0 --name=mlbparks --allow-missing-imagestream-tags=true -n ${GUID}-parks-dev
-oc new-app ${GUID}-parks-dev/nationalparks:0.0-0 --name=nationalparks --allow-missing-imagestream-tags=true -n ${GUID}-parks-dev
+oc new-app ${GUID}-parks-dev/parksmap:latest --name=parksmap --allow-missing-imagestream-tags=true -n ${GUID}-parks-dev
+oc new-app ${GUID}-parks-dev/mlbparks:latest --name=mlbparks --allow-missing-imagestream-tags=true -n ${GUID}-parks-dev
+oc new-app ${GUID}-parks-dev/nationalparks:latest --name=nationalparks --allow-missing-imagestream-tags=true -n ${GUID}-parks-dev
 
 oc set env dc/mlbparks --from=configmap/mlbparks-config -n ${GUID}-parks-dev
 oc set env dc/nationalparks --from=configmap/nationalparks-config -n ${GUID}-parks-dev

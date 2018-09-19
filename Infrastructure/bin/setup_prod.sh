@@ -23,8 +23,8 @@ oc process -f ./Infrastructure/templates/mongodb_statefulset.yaml -n ${GUID}-par
 oc expose svc/mongodb-internal -n ${GUID}-parks-prod
 oc expose svc/mongodb -n ${GUID}-parks-prod
 
-oc new-app ${GUID}-parks-dev/mlbparks:0.0 --name=mlbparks-blue  --allow-missing-imagestream-tags=true -n ${GUID}-parks-prod
-oc new-app ${GUID}-parks-dev/mlbparks:0.0 --name=mlbparks-green --allow-missing-imagestream-tags=true -n ${GUID}-parks-prod
+oc new-app ${GUID}-parks-dev/mlbparks:latest --name=mlbparks-blue  --allow-missing-imagestream-tags=true -n ${GUID}-parks-prod
+oc new-app ${GUID}-parks-dev/mlbparks:latest --name=mlbparks-green --allow-missing-imagestream-tags=true -n ${GUID}-parks-prod
 
 oc patch dc/mlbparks-blue  --patch='{ "spec": { "strategy": { "type": "Recreate" }}}' -n ${GUID}-parks-prod
 oc patch dc/mlbparks-green --patch='{ "spec": { "strategy": { "type": "Recreate" }}}' -n ${GUID}-parks-prod
@@ -47,8 +47,8 @@ oc expose dc/mlbparks-green --port 8080 -n ${GUID}-parks-prod
 
 oc expose svc/mlbparks-green --name mlbparks -n ${GUID}-parks-prod
 
-oc new-app ${GUID}-parks-dev/nationalparks:0.0 --name=nationalparks-blue  --allow-missing-imagestream-tags=true -n ${GUID}-parks-prod
-oc new-app ${GUID}-parks-dev/nationalparks:0.0 --name=nationalparks-green --allow-missing-imagestream-tags=true -n ${GUID}-parks-prod
+oc new-app ${GUID}-parks-dev/nationalparks:latest --name=nationalparks-blue  --allow-missing-imagestream-tags=true -n ${GUID}-parks-prod
+oc new-app ${GUID}-parks-dev/nationalparks:latest --name=nationalparks-green --allow-missing-imagestream-tags=true -n ${GUID}-parks-prod
 
 oc patch dc/nationalparks-blue  --patch='{ "spec": { "strategy": { "type": "Recreate" }}}' -n ${GUID}-parks-prod
 oc patch dc/nationalparks-green --patch='{ "spec": { "strategy": { "type": "Recreate" }}}' -n ${GUID}-parks-prod
@@ -71,8 +71,8 @@ oc expose dc/nationalparks-green --port 8080 -n ${GUID}-parks-prod
 
 oc expose svc/nationalparks-green --name nationalparks -n ${GUID}-parks-prod
 
-oc new-app ${GUID}-parks-dev/parksmap:0.0 --name=parksmap-blue  --allow-missing-imagestream-tags=true -n ${GUID}-parks-prod
-oc new-app ${GUID}-parks-dev/parksmap:0.0 --name=parksmap-green --allow-missing-imagestream-tags=true -n ${GUID}-parks-prod
+oc new-app ${GUID}-parks-dev/parksmap:latest --name=parksmap-blue  --allow-missing-imagestream-tags=true -n ${GUID}-parks-prod
+oc new-app ${GUID}-parks-dev/parksmap:latest --name=parksmap-green --allow-missing-imagestream-tags=true -n ${GUID}-parks-prod
 
 oc patch dc/parksmap-blue  --patch='{ "spec": { "strategy": { "type": "Recreate" }}}' -n ${GUID}-parks-prod
 oc patch dc/parksmap-green --patch='{ "spec": { "strategy": { "type": "Recreate" }}}' -n ${GUID}-parks-prod

@@ -65,7 +65,7 @@ podTemplate(
       echo "Deploying container image to Development Project..."
 
       sh "oc set image dc/parksmap parksmap=docker-registry.default.svc:5000/${GUID}-parks-dev/parksmap:${devTag} -n ${GUID}-parks-dev"
-      sh "oc delete configmap parksmap-config -n ${GUID}-parks-dev --ignore-not-found=true"
+      sh "oc delete configmap parksmap-config --ignore-not-found=true -n ${GUID}-parks-dev"
       sh "oc create configmap parksmap-config --from-literal=APPNAME='ParksMap (Dev)' -n ${GUID}-parks-dev"
       sh "oc set env dc/parksmap --from=configmap/parksmap-config -n ${GUID}-parks-dev" 
 
