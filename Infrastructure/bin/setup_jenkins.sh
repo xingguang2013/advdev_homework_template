@@ -46,7 +46,7 @@ oc set resources dc/jenkins --limits=memory=4Gi,cpu=4 --requests=memory=2Gi,cpu=
 
 oc rollout resume dc jenkins -n ${GUID}-jenkins
 
-oc new-build --name=maven-slave-pod --dockerfile=$'FROM docker.io/openshift/jenkins-slave-maven-centos7:v3.9\n USER root\n RUN yum -y install skopeo apb && yum clean all\n USER 1001' -n ${GUID}-jenkins
+oc new-build --name=jenkins-slave-pod --dockerfile=$'FROM docker.io/openshift/jenkins-slave-maven-centos7:v3.9\n USER root\n RUN yum -y install skopeo apb && yum clean all\n USER 1001' -n ${GUID}-jenkins
 
 while : ; do
   echo "Checking Jenkins is Ready..."
@@ -58,7 +58,7 @@ done
 
 echo "Jenkins has been started successfully"
 
-oc tag maven-slave-pod:latest maven-slave-pod:v3.9 -n ${GUID}-jenkins
+oc tag jenkins-slave-pod:latest jenkins-slave-pod:v3.9 -n ${GUID}-jenkins
 
 oc create -f ./Infrastructure/templates/mlbparks-pipeline.yaml -n ${GUID}-jenkins
 oc create -f ./Infrastructure/templates/nationalparks-pipeline.yaml -n ${GUID}-jenkins
