@@ -65,18 +65,20 @@ podTemplate(
     stage('Verify Deploy In Development') {
       echo "Deploying container image to Development Project..."
       sh "oc set image dc/nationalparks nationalparks=docker-registry.default.svc:5000/${GUID}-parks-dev/nationalparks:${devTag} -n ${GUID}-parks-dev"
-      sh "oc delete configmap nationalparks-config -n ${GUID}-parks-dev --ignore-not-found=true"
-      sh "oc create configmap nationalparks-config \
-                    --from-literal=APPNAME='National Parks (Dev)' \
-                    --from-literal=DB_HOST=mongodb.${GUID}-parks-dev.svc \
-                    --from-literal=DB_NAME=mongodb \
-                    --from-literal=DB_PASSWORD=mongodb \
-                    --from-literal=DB_PORT=27017 \
-                    --from-literal=DB_USERNAME=mongodb \
-                    -n ${GUID}-parks-dev"
-      sh "oc set env dc/nationalparks --from=configmap/nationalparks-config -n ${GUID}-parks-dev" 
-      openshiftDeploy depCfg: 'nationalparks', namespace: "${GUID}-parks-dev", verbose: 'false', waitTime: '', waitUnit: 'sec'
-      openshiftVerifyDeployment depCfg: 'nationalparks', namespace: "${GUID}-parks-dev", replicaCount: '1', verbose: 'false', verifyReplicaCount: 'false', waitTime: '', waitUnit: 'sec'
+      
+      //sh "oc delete configmap nationalparks-config -n ${GUID}-parks-dev --ignore-not-found=true"
+      //sh "oc create configmap nationalparks-config \
+      //              --from-literal=APPNAME='National Parks (Dev)' \
+      //              --from-literal=DB_HOST=mongodb.${GUID}-parks-dev.svc \
+      //              --from-literal=DB_NAME=mongodb \
+      //              --from-literal=DB_PASSWORD=mongodb \
+      //              --from-literal=DB_PORT=27017 \
+      //              --from-literal=DB_USERNAME=mongodb \
+      //              -n ${GUID}-parks-dev"
+      //sh "oc set env dc/nationalparks --from=configmap/nationalparks-config -n ${GUID}-parks-dev" 
+      
+      openshiftDeploy depCfg: 'nationalparks', namespace: "${GUID}-parks-dev", verbose: 'false', waitTime: '20', waitUnit: 'min'
+      openshiftVerifyDeployment depCfg: 'nationalparks', namespace: "${GUID}-parks-dev", replicaCount: '1', verbose: 'false', verifyReplicaCount: 'false', waitTime: '20', waitUnit: 'min'
       openshiftVerifyService namespace: "${GUID}-parks-dev", svcName: 'nationalparks', verbose: 'false'
     }
 
