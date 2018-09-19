@@ -57,7 +57,8 @@ podTemplate(
 
    stage('Build and Tag OpenShift Image') {
       echo "Building OpenShift container image tasks:${devTag}..."
-      sh "oc start-build parksmap --follow --from-file=http://nexus3-${GUID}-nexus.apps.${CLUSTER}/repository/releases/com/openshift/evg/roadshow/parksmap/${version}/parksmap-${version}.jar -n ${GUID}-parks-dev"
+      sh "oc start-build parksmap --follow --from-file=./target/parksmap.jar -n ${GUID}-parks-dev"
+      // sh "oc start-build parksmap --follow --from-file=http://nexus3-${GUID}-nexus.apps.${CLUSTER}/repository/releases/com/openshift/evg/roadshow/parksmap/${version}/parksmap-${version}.jar -n ${GUID}-parks-dev"
       openshiftTag alias: 'false', destStream: 'parksmap', destTag: devTag, destinationNamespace: "${GUID}-parks-dev", namespace: "${GUID}-parks-dev", srcStream: 'parksmap', srcTag: 'latest', verbose: 'false'
     }
 
