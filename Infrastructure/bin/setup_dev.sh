@@ -23,7 +23,7 @@ oc new-build --binary=true --name="mlbparks" jboss-eap70-openshift:1.7 -n ${GUID
 oc new-build --binary=true --name="nationalparks" redhat-openjdk18-openshift:1.2 -n ${GUID}-parks-dev
 oc new-build --binary=true --name="parksmap" redhat-openjdk18-openshift:1.2 -n ${GUID}-parks-dev
 
-oc create configmap mlbparks-configmap --from-literal="APPNAME=MLB Parks (Dev)" \
+oc create configmap mlbparks-config --from-literal="APPNAME=MLB Parks (Dev)" \
     --from-literal="DB_HOST=mongodb" \
     --from-literal="DB_PORT=27017" \
     --from-literal="DB_USERNAME=mongodb" \
@@ -31,7 +31,7 @@ oc create configmap mlbparks-configmap --from-literal="APPNAME=MLB Parks (Dev)" 
     --from-literal="DB_NAME=mongodb" \
     -n ${GUID}-parks-dev
 
-oc create configmap nationalparks-configmap --from-literal="APPNAME=National Parks (Dev)" \
+oc create configmap nationalparks-config --from-literal="APPNAME=National Parks (Dev)" \
     --from-literal="DB_HOST=mongodb" \
     --from-literal="DB_PORT=27017" \
     --from-literal="DB_USERNAME=mongodb" \
@@ -39,15 +39,15 @@ oc create configmap nationalparks-configmap --from-literal="APPNAME=National Par
     --from-literal="DB_NAME=mongodb" \
     -n ${GUID}-parks-dev
 
-oc create configmap parksmap-configmap --from-literal="APPNAME=ParksMap (Dev)" -n ${GUID}-parks-dev
+oc create configmap parksmap-config --from-literal="APPNAME=ParksMap (Dev)" -n ${GUID}-parks-dev
 
 oc new-app ${GUID}-parks-dev/parksmap:0.0-0 --name=parksmap --allow-missing-imagestream-tags=true -n ${GUID}-parks-dev
 oc new-app ${GUID}-parks-dev/mlbparks:0.0-0 --name=mlbparks --allow-missing-imagestream-tags=true -n ${GUID}-parks-dev
 oc new-app ${GUID}-parks-dev/nationalparks:0.0-0 --name=nationalparks --allow-missing-imagestream-tags=true -n ${GUID}-parks-dev
 
-oc set env dc/mlbparks --from=configmap/mlbparks-configmap -n ${GUID}-parks-dev
-oc set env dc/nationalparks --from=configmap/nationalparks-configmap -n ${GUID}-parks-dev
-oc set env dc/parksmap --from=configmap/parksmap-configmap -n ${GUID}-parks-dev
+oc set env dc/mlbparks --from=configmap/mlbparks-config -n ${GUID}-parks-dev
+oc set env dc/nationalparks --from=configmap/nationalparks-config -n ${GUID}-parks-dev
+oc set env dc/parksmap --from=configmap/parksmap-config -n ${GUID}-parks-dev
 
 oc set triggers dc/parksmap --remove-all -n ${GUID}-parks-dev
 oc set triggers dc/mlbparks --remove-all -n ${GUID}-parks-dev

@@ -50,7 +50,7 @@ podTemplate(
       sh "${mvnCmd} -f ./Nationalparks/pom.xml sonar:sonar -Dsonar.host.url=http://sonarqube-${GUID}-sonarqube.apps.${CLUSTER} -Dsonar.projectName=${JOB_BASE_NAME}-${devTag}"
     } 
 
-    stage('Publish Artifact To Nexus') {
+    stage('Publish JAR Artifact To Nexus') {
       echo "Publishing artifact to nexus..."
       sh "${mvnCmd} -f ./Nationalparks/pom.xml deploy -DskipTests=true -DaltDeploymentRepository=nexus::default::http://nexus3-${GUID}-nexus.apps.${CLUSTER}/repository/releases"
     }
