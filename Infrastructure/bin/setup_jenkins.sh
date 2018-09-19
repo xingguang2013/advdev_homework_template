@@ -62,8 +62,8 @@ while : ; do
   echo "Checking Jenkins is Ready..."
    oc get pod -n ${GUID}-jenkins | grep -v "deploy\|build" | grep -q "1/1"
    [[ "$?" == "1" ]] || break
-   echo "Sleeping 15 seconds for ${GUID}-jenkins."
-   sleep 15
+   echo "Sleeping 20 seconds for ${GUID}-jenkins."
+   sleep 20
 done
 
 echo "Jenkins has been started successfully"

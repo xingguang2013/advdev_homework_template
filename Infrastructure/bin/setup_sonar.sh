@@ -25,8 +25,8 @@ while : ; do
    echo "Checking SonarQube is Ready..."
    oc get pod -n ${GUID}-sonarqube | grep -v "deploy\|build" | grep -q "1/1"
    [[ "$?" == "1" ]] || break
-   echo "Sleeping 15 seconds for ${GUID}-sonarqube."
-   sleep 15
+   echo "Sleeping 20 seconds for ${GUID}-sonarqube."
+   sleep 20
  done
 
  echo "SonarQube has been started successfully"
