@@ -43,7 +43,7 @@ oc set probe dc/jenkins --liveness --failure-threshold 3 --initial-delay-seconds
 
 oc patch dc/jenkins -p '{"spec":{"strategy":{"recreateParams":{"timeoutSeconds":600}}}}' -n ${GUID}-jenkins
 
-oc set resources dc/jenkins --limits=memory=4Gi,cpu=4 --requests=memory=2Gi,cpu=2 -n ${GUID}-jenkins
+oc set resources dc/jenkins --limits=memory=2Gi,cpu=2 --requests=memory=1Gi,cpu=1 -n ${GUID}-jenkins
 
 oc rollout resume dc jenkins -n ${GUID}-jenkins
 
