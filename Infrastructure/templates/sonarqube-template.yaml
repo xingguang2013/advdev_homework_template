@@ -199,8 +199,8 @@ objects:
             timeoutSeconds: 10
           resources:
             limits:
-              cpu: "2"
-              memory: 2Gi
+              cpu: "3"
+              memory: 3Gi
             requests:
               cpu: "1"
               memory: 1Gi
