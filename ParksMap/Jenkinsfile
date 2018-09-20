@@ -64,12 +64,11 @@ podTemplate(
 
     stage('Verify Deploy In Development') {
       echo "Deploying container image to Development Project..."
-
       sh "oc set image dc/parksmap parksmap=docker-registry.default.svc:5000/${GUID}-parks-dev/parksmap:${devTag} -n ${GUID}-parks-dev"
       
-      //sh "oc delete configmap parksmap-config --ignore-not-found=true -n ${GUID}-parks-dev"
-      //sh "oc create configmap parksmap-config --from-literal=APPNAME='ParksMap (Dev)' -n ${GUID}-parks-dev"
-      //sh "oc set env dc/parksmap --from=configmap/parksmap-config -n ${GUID}-parks-dev" 
+      sh "oc delete configmap parksmap-config --ignore-not-found=true -n ${GUID}-parks-dev"
+      sh "oc create configmap parksmap-config --from-literal=APPNAME='ParksMap (Dev)' -n ${GUID}-parks-dev"
+      sh "oc set env dc/parksmap --from=configmap/parksmap-config -n ${GUID}-parks-dev" 
 
       openshiftDeploy depCfg: 'parksmap', namespace: "${GUID}-parks-dev", verbose: 'false', waitTime: '20', waitUnit: 'min'
       openshiftVerifyDeployment depCfg: 'parksmap', namespace: "${GUID}-parks-dev", replicaCount: '1', verbose: 'false', verifyReplicaCount: 'false', waitTime: '20', waitUnit: 'min'
@@ -109,13 +108,15 @@ podTemplate(
       echo "Config Map to be used:   " + destcfgMap
 
       sh "oc set image dc/${destApp} ${destApp}=docker-registry.default.svc:5000/${GUID}-parks-dev/parksmap:${prodTag} -n ${GUID}-parks-prod"              
+      
       sh "oc delete configmap parksmap-config -n ${GUID}-parks-prod --ignore-not-found=true"
       sh "oc create configmap parksmap-config --from-literal=APPNAME='ParksMap (${destcfgMap})' -n ${GUID}-parks-prod"
       sh "oc set env dc/${destApp} --from=configmap/parksmap-config -n ${GUID}-parks-prod"
+      
       sh "oc expose dc/${destApp} --port 8080 -n ${GUID}-parks-prod" 
 
-      openshiftDeploy depCfg: destApp, namespace: "${GUID}-parks-prod", verbose: 'false', waitTime: '', waitUnit: 'sec'
-      openshiftVerifyDeployment depCfg: destApp, namespace: "${GUID}-parks-prod", replicaCount: '1', verbose: 'false', verifyReplicaCount: 'true', waitTime: '', waitUnit: 'sec'
+      openshiftDeploy depCfg: destApp, namespace: "${GUID}-parks-prod", verbose: 'false', waitTime: '20', waitUnit: 'min'
+      openshiftVerifyDeployment depCfg: destApp, namespace: "${GUID}-parks-prod", replicaCount: '1', verbose: 'false', verifyReplicaCount: 'true', waitTime: '20', waitUnit: 'min'
       openshiftVerifyService namespace: "${GUID}-parks-prod", svcName: destApp, verbose: 'false'
     }
 
