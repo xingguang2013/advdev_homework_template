@@ -72,7 +72,7 @@ objects:
                 command:
                   - stat
                   - /tmp/initialized
-              initialDelaySeconds: 30
+              initialDelaySeconds: 60
     volumeClaimTemplates:
       - metadata:
           name: mongo-data
