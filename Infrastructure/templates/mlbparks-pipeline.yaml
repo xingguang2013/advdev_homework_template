@@ -6,7 +6,7 @@ spec:
   source:
     type: Git
     git:
-      uri: https://github.com/xingguang2013/advdev_homework_template.git
+      uri: ${REPO}
       ref: master
   strategy:
     type: JenkinsPipeline
@@ -16,4 +16,6 @@ spec:
            value: ${GUID}
          - name: CLUSTER
            value: ${CLUSTER}
+         - name: REPO
+           value: ${REPO}
        jenkinsfilePath: MLBParks/Jenkinsfile

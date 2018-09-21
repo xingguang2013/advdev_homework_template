@@ -34,7 +34,7 @@ oc policy add-role-to-user admin system:serviceaccount:gpte-jenkins:jenkins -n $
 oc policy add-role-to-user view system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-nexus
 oc policy add-role-to-user edit system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-nexus
 
-echo "===================[new-app nexus]============================="
+echo "===================[new-app nexus]======================================="
 oc process -f ./Infrastructure/templates/nexus-template.yaml -p GUID=${GUID} -n ${GUID}-nexus | oc create -f - -n ${GUID}-nexus
 
 while : ; do
@@ -47,10 +47,14 @@ done
 
 echo "Nexus has been started successfully"
 
+echo "===================[download setup_nexus3.sh]============================"
 curl -o setup_nexus3.sh -s https://raw.githubusercontent.com/wkulhanek/ocp_advanced_development_resources/master/nexus/setup_nexus3.sh
 
+echo "===================[chmod +x setup_nexus3.sh]============================"
 chmod +x setup_nexus3.sh
 
+echo "===================[call setup_nexus3.sh]================================"
 sh setup_nexus3.sh admin admin123 http://$(oc get route nexus3 --template='{{ .spec.host }}' -n ${GUID}-nexus)
 
+echo "===================[rm setup_nexus3.sh]=================================="
 rm setup_nexus3.sh

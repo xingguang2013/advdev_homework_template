@@ -19,7 +19,7 @@ oc policy add-role-to-user admin system:serviceaccount:gpte-jenkins:jenkins -n $
 oc policy add-role-to-user view system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-sonarqube
 oc policy add-role-to-user edit system:serviceaccount:gpte-jenkins:jenkins -n ${GUID}-sonarqube
 
-echo "===================[new-app sonarqube]========================="
+echo "===================[new-app sonarqube]==================================="
 oc process -f ./Infrastructure/templates/sonarqube-template.yaml -p GUID=${GUID} -n ${GUID}-sonarqube | oc create -n ${GUID}-sonarqube -f -
 
 while : ; do
@@ -28,6 +28,6 @@ while : ; do
    [[ "$?" == "1" ]] || break
    echo "Sleeping 20 seconds for ${GUID}-sonarqube."
    sleep 20
- done
+done
 
- echo "SonarQube has been started successfully"
+echo "SonarQube has been started successfully"
